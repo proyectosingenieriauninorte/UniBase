@@ -3,3 +3,77 @@ Initialize the Project:
 mkdir unibase
 cd unibase
 npm init -y
+
+Initialize a new Node.js project using npm:
+node server.js
+
+Testing the Endpoints
+
+Endpoint: POST http://localhost:3000/data
+Request Body:
+json
+Copy code
+{
+  "table_name": "example_table",
+  "data": { "name": "John Doe", "age": 30 }
+}
+Response:
+json
+Copy code
+{
+  "index": 0
+}
+
+Retrieve All Data:
+
+Endpoint: GET http://localhost:3000/data/example_table
+Response:
+json
+Copy code
+{
+  "data": [
+    { "name": "John Doe", "age": 30, "index": 0 }
+  ]
+}
+Retrieve Data by Index:
+
+Endpoint: GET http://localhost:3000/data/example_table/0
+Response:
+json
+Copy code
+{
+  "data": { "name": "John Doe", "age": 30, "index": 0 }
+}
+Update Data by Index:
+
+Endpoint: PUT http://localhost:3000/data/example_table/0
+Request Body:
+json
+Copy code
+{
+  "data": { "name": "Jane Doe", "age": 25 }
+}
+Response:
+json
+Copy code
+{
+  "status": "success"
+}
+Delete Data by Index:
+
+Endpoint: DELETE http://localhost:3000/data/example_table/0
+Response:
+json
+Copy code
+{
+  "status": "success"
+}
+Delete Table:
+
+Endpoint: DELETE http://localhost:3000/data/example_table
+Response:
+json
+Copy code
+{
+  "status": "success"
+}
