@@ -1,0 +1,5 @@
+Initialize the Project:
+
+mkdir unibase
+cd unibase
+npm init -y
