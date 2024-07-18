@@ -3,6 +3,7 @@ Initialize the Project:
 mkdir unibase
 cd unibase
 npm init -y
+npm install mocha chai supertest --save-dev
 
 Initialize a new Node.js project using npm:
 node server.js
