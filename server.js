@@ -3,7 +3,7 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
-const getTableFilePath = (tableName) => path.join(__dirname, `${tableName}.json`);
+const getTableFilePath = (tableName) => path.join(process.env.HOME || __dirname, `${tableName}.json`);
 
 const parseBody = (req, callback) => {
     let body = '';
