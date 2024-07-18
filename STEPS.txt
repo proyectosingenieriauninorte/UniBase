@@ -10,71 +10,31 @@ node server.js
 
 Testing the Endpoints
 
-Endpoint: POST http://localhost:3000/data
-Request Body:
-json
-Copy code
-{
-  "table_name": "example_table",
-  "data": { "name": "John Doe", "age": 30 }
-}
-Response:
-json
-Copy code
-{
-  "index": 0
-}
+Store Data (POST /data)
+curl -X POST http://localhost:3000/data ^
+    -H "Content-Type: application/json" ^
+    -d "{\"table_name\": \"test_table\", \"data\": {\"name\": \"John Doe\", \"age\": 30}}"
 
-Retrieve All Data:
+curl -X POST http://localhost:3000/data ^
+    -H "Content-Type: application/json" ^
+    -d "{\"table_name\": \"test_table\", \"data\": {\"name\": \"someName\", \"age\": 31}}"
 
-Endpoint: GET http://localhost:3000/data/example_table
-Response:
-json
-Copy code
-{
-  "data": [
-    { "name": "John Doe", "age": 30, "index": 0 }
-  ]
-}
-Retrieve Data by Index:
+Retrieve All Data 
+curl -X GET http://localhost:3000/data/test_table
 
-Endpoint: GET http://localhost:3000/data/example_table/0
-Response:
-json
-Copy code
-{
-  "data": { "name": "John Doe", "age": 30, "index": 0 }
-}
-Update Data by Index:
+Retrieve Data by Index
+curl -X GET http://localhost:3000/data/test_table/0
 
-Endpoint: PUT http://localhost:3000/data/example_table/0
-Request Body:
-json
-Copy code
-{
-  "data": { "name": "Jane Doe", "age": 25 }
-}
-Response:
-json
-Copy code
-{
-  "status": "success"
-}
-Delete Data by Index:
 
-Endpoint: DELETE http://localhost:3000/data/example_table/0
-Response:
-json
-Copy code
-{
-  "status": "success"
-}
-Delete Table:
+Update
+curl -X PUT http://localhost:3000/data/test_table/0 ^
+    -H "Content-Type: application/json" ^
+    -d "{\"data\": {\"name\": \"Jane Doe\", \"age\": 25}}"
 
-Endpoint: DELETE http://localhost:3000/data/example_table
-Response:
-json
-Copy code
-{
-  "status": "success"
-}
+Delete entry with index
+curl -X DELETE http://localhost:3000/data/test_table/0
+
+Delete table
+curl -X DELETE http://localhost:3000/data/test_table
+
+
