@@ -11,30 +11,141 @@ node server.js
 Testing the Endpoints
 
 Store Data (POST /data)
-curl -X POST http://localhost:3000/data ^
+curl -X POST http://localhost:3000/data/store \
+    -H "Content-Type: application/json" \
+    -d '{"table_name": "test_table", "data": {"name": "John Doe", "age": 30}}'
+
+Store Data (POST /data/store)
+macOS:
+
+sh
+Copy code
+curl -X POST http://localhost:3000/data/store \
+    -H "Content-Type: application/json" \
+    -d '{"table_name": "test_table", "data": {"name": "John Doe", "age": 30}}'
+Windows (CMD):
+
+cmd
+Copy code
+curl -X POST http://localhost:3000/data/store ^
     -H "Content-Type: application/json" ^
     -d "{\"table_name\": \"test_table\", \"data\": {\"name\": \"John Doe\", \"age\": 30}}"
+Expected Response:
 
-curl -X POST http://localhost:3000/data ^
-    -H "Content-Type: application/json" ^
-    -d "{\"table_name\": \"test_table\", \"data\": {\"name\": \"someName\", \"age\": 31}}"
+json
+Copy code
+{
+  "entry_id": "unique_entry_id"
+}
+Retrieve All Data (GET /data/
+/all)
+macOS:
 
-Retrieve All Data 
-curl -X GET http://localhost:3000/data/test_table
+sh
+Copy code
+curl -X GET http://localhost:3000/data/test_table/all
+Windows (CMD):
 
-Retrieve Data by Index
-curl -X GET http://localhost:3000/data/test_table/0
+cmd
+Copy code
+curl -X GET http://localhost:3000/data/test_table/all
+Expected Response:
 
+json
+Copy code
+{
+  "data": [
+    {
+      "name": "John Doe",
+      "age": 30,
+      "entry_id": "unique_entry_id"
+    }
+  ]
+}
+Retrieve Data by Entry ID (GET /data/
+/entry/
+)
+macOS:
 
-Update
-curl -X PUT http://localhost:3000/data/test_table/0 ^
+sh
+Copy code
+curl -X GET http://localhost:3000/data/test_table/entry/unique_entry_id
+Windows (CMD):
+
+cmd
+Copy code
+curl -X GET http://localhost:3000/data/test_table/entry/unique_entry_id
+Expected Response:
+
+json
+Copy code
+{
+  "data": {
+    "name": "John Doe",
+    "age": 30,
+    "entry_id": "unique_entry_id"
+  }
+}
+Update Data by Entry ID (PUT /data/
+/update/
+)
+macOS:
+
+sh
+Copy code
+curl -X PUT http://localhost:3000/data/test_table/update/unique_entry_id \
+    -H "Content-Type: application/json" \
+    -d '{"data": {"name": "Jane Doe", "age": 25}}'
+Windows (CMD):
+
+cmd
+Copy code
+curl -X PUT http://localhost:3000/data/test_table/update/unique_entry_id ^
     -H "Content-Type: application/json" ^
     -d "{\"data\": {\"name\": \"Jane Doe\", \"age\": 25}}"
+Expected Response:
 
-Delete entry with index
-curl -X DELETE http://localhost:3000/data/test_table/0
+json
+Copy code
+{
+  "status": "success"
+}
+Delete Data by Entry ID (DELETE /data/
+/delete/
+)
+macOS:
 
-Delete table
-curl -X DELETE http://localhost:3000/data/test_table
+sh
+Copy code
+curl -X DELETE http://localhost:3000/data/test_table/delete/unique_entry_id
+Windows (CMD):
 
+cmd
+Copy code
+curl -X DELETE http://localhost:3000/data/test_table/delete/unique_entry_id
+Expected Response:
 
+json
+Copy code
+{
+  "status": "success"
+}
+Delete Table (DELETE /data/
+/delete)
+macOS:
+
+sh
+Copy code
+curl -X DELETE http://localhost:3000/data/test_table/delete
+Windows (CMD):
+
+cmd
+Copy code
+curl -X DELETE http://localhost:3000/data/test_table/delete
+Expected Response:
+
+json
+Copy code
+{
+  "status": "success"
+}

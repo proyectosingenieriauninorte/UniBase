@@ -7,16 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --timeout 10000",
     "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "chai": "^5.1.1",
-    "mocha": "^10.6.0",
-    "supertest": "^7.0.0"
-  }
+  "description": ""
 }
