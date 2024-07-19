@@ -57,8 +57,8 @@ const handleGetAllData = (req, res, tableName) => {
 
     fs.readFile(filePath, (err, fileData) => {
         if (err) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Table not found' }));
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ data: [] }));
         }
         const tableData = JSON.parse(fileData);
         res.writeHead(200, { 'Content-Type': 'application/json' });
