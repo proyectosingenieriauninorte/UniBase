@@ -85,6 +85,35 @@ const handleGetDataByEntryId = (req, res, tableName, entryId) => {
     });
 };
 
+// const handleUpdateData = (req, res, tableName, entryId) => {
+//     parseBody(req, ({ data }) => {
+//         const filePath = getTableFilePath(tableName);
+
+//         fs.readFile(filePath, (err, fileData) => {
+//             if (err) {
+//                 res.writeHead(404, { 'Content-Type': 'application/json' });
+//                 return res.end(JSON.stringify({ error: 'Table not found' }));
+//             }
+//             let tableData = JSON.parse(fileData);
+//             const entryIndex = tableData.findIndex(item => item.entry_id === entryId);
+//             if (entryIndex === -1) {
+//                 res.writeHead(404, { 'Content-Type': 'application/json' });
+//                 return res.end(JSON.stringify({ error: 'Entry ID not found' }));
+//             }
+//             tableData[entryIndex] = { ...data, entry_id: entryId };
+
+//             fs.writeFile(filePath, JSON.stringify(tableData), (err) => {
+//                 if (err) {
+//                     res.writeHead(500, { 'Content-Type': 'application/json' });
+//                     return res.end(JSON.stringify({ error: 'Failed to update data' }));
+//                 }
+//                 res.writeHead(200, { 'Content-Type': 'application/json' });
+//                 res.end(JSON.stringify({ status: 'success' }));
+//             });
+//         });
+//     });
+// };
+
 const handleUpdateData = (req, res, tableName, entryId) => {
     parseBody(req, ({ data }) => {
         const filePath = getTableFilePath(tableName);
@@ -100,7 +129,30 @@ const handleUpdateData = (req, res, tableName, entryId) => {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Entry ID not found' }));
             }
-            tableData[entryIndex] = { ...data, entry_id: entryId };
+
+            // Validate the incoming data fields match the existing entry's fields
+            const existingEntry = tableData[entryIndex];
+            const keysToValidate = Object.keys(existingEntry).filter(key => key !== 'entry_id');
+            const incomingDataKeys = Object.keys(data);
+
+            for (const key of keysToValidate) {
+                if (!incomingDataKeys.includes(key)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: `Missing field: ${key}` }));
+                }
+            }
+
+            for (const key of incomingDataKeys) {
+                if (!keysToValidate.includes(key)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: `Unexpected field: ${key}` }));
+                }
+            }
+
+            // Dismiss possible entry_id in the incoming data
+            delete data.entry_id;
+
+            tableData[entryIndex] = { ...existingEntry, ...data, entry_id: entryId };
 
             fs.writeFile(filePath, JSON.stringify(tableData), (err) => {
                 if (err) {
