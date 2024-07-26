@@ -1,5 +1,8 @@
-class RequestHandler {
+import IRequestHandler from './IRequestHandler.js';
+
+class RequestHandler extends IRequestHandler {
     constructor(fileManager) {
+        super();
         this.fileManager = fileManager;
     }
 

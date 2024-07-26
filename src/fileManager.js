@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import IFileManager from './IFileManager.js';
 
-class FileManager {
+class FileManager extends IFileManager {
     constructor(dataDir) {
+        super();
         this.dataDir = dataDir;
     }
 
