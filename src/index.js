@@ -2,9 +2,11 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import path from 'path';
 import fs from 'fs';
-import FileManager from './fileManager.js';
-import RequestHandler from './requestHandler.js';
-import Server from './server.js';
+import FileManager from './adapters/repositories/fileManager.js';
+import DataManager from './usecase/dataManager.js';
+import RequestHandler from './usecase/requestHandler.js';
+import HttpController from './adapters/controllers/httpController.js';
+import Server from './frameworks/server.js';
 
 // Helper functions to get the current file's directory
 const __filename = fileURLToPath(import.meta.url);
@@ -19,8 +21,10 @@ if (!fs.existsSync(DATA_DIR)) {
 }
 
 const fileManager = new FileManager(DATA_DIR);
-const requestHandler = new RequestHandler(fileManager);
-const server = new Server(process.env.PORT, requestHandler);
+const dataManager = new DataManager(fileManager);
+const requestHandler = new RequestHandler(dataManager);
+const httpController = new HttpController(requestHandler);
+const server = new Server(process.env.PORT, httpController);
 
 server.start();
 

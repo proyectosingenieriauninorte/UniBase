@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import IFileManager from './IFileManager.js';
+import IFileManager from '../../usecase/IFileManager.js';
 
 class FileManager extends IFileManager {
     constructor(dataDir) {
