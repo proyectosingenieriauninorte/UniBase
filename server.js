@@ -5,9 +5,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+// Get the current file's directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Define the directory to store data files
 const DATA_DIR = path.join(__dirname, 'data');
 
 // Ensure the data directory exists
@@ -15,8 +17,10 @@ if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR);
 }
 
+// Generate the file path for a given table name
 const getTableFilePath = (tableName) => path.join(DATA_DIR, `${tableName}.json`);
 
+// Parse the request body into JSON
 const parseBody = (req, callback) => {
     let body = '';
     req.on('data', chunk => {
@@ -27,6 +31,7 @@ const parseBody = (req, callback) => {
     });
 };
 
+// Handle storing data
 const handleStoreData = (req, res) => {
     parseBody(req, ({ table_name, data }) => {
         const filePath = getTableFilePath(table_name);
@@ -37,7 +42,8 @@ const handleStoreData = (req, res) => {
                 tableData = JSON.parse(fileData);
             }
 
-            const entry_id = Date.now().toString(); // Unique entry ID based on timestamp
+            // Generate a unique entry ID based on the current timestamp
+            const entry_id = Date.now().toString();
             tableData.push({ ...data, entry_id });
 
             fs.writeFile(filePath, JSON.stringify(tableData), (err) => {
@@ -52,6 +58,7 @@ const handleStoreData = (req, res) => {
     });
 };
 
+// Handle retrieving all data for a table
 const handleGetAllData = (req, res, tableName) => {
     const filePath = getTableFilePath(tableName);
 
@@ -66,6 +73,7 @@ const handleGetAllData = (req, res, tableName) => {
     });
 };
 
+// Handle retrieving data by entry ID
 const handleGetDataByEntryId = (req, res, tableName, entryId) => {
     const filePath = getTableFilePath(tableName);
 
@@ -85,35 +93,7 @@ const handleGetDataByEntryId = (req, res, tableName, entryId) => {
     });
 };
 
-// const handleUpdateData = (req, res, tableName, entryId) => {
-//     parseBody(req, ({ data }) => {
-//         const filePath = getTableFilePath(tableName);
-
-//         fs.readFile(filePath, (err, fileData) => {
-//             if (err) {
-//                 res.writeHead(404, { 'Content-Type': 'application/json' });
-//                 return res.end(JSON.stringify({ error: 'Table not found' }));
-//             }
-//             let tableData = JSON.parse(fileData);
-//             const entryIndex = tableData.findIndex(item => item.entry_id === entryId);
-//             if (entryIndex === -1) {
-//                 res.writeHead(404, { 'Content-Type': 'application/json' });
-//                 return res.end(JSON.stringify({ error: 'Entry ID not found' }));
-//             }
-//             tableData[entryIndex] = { ...data, entry_id: entryId };
-
-//             fs.writeFile(filePath, JSON.stringify(tableData), (err) => {
-//                 if (err) {
-//                     res.writeHead(500, { 'Content-Type': 'application/json' });
-//                     return res.end(JSON.stringify({ error: 'Failed to update data' }));
-//                 }
-//                 res.writeHead(200, { 'Content-Type': 'application/json' });
-//                 res.end(JSON.stringify({ status: 'success' }));
-//             });
-//         });
-//     });
-// };
-
+// Handle updating data by entry ID
 const handleUpdateData = (req, res, tableName, entryId) => {
     parseBody(req, ({ data }) => {
         const filePath = getTableFilePath(tableName);
@@ -130,7 +110,7 @@ const handleUpdateData = (req, res, tableName, entryId) => {
                 return res.end(JSON.stringify({ error: 'Entry ID not found' }));
             }
 
-            // Validate the incoming data fields match the existing entry's fields
+            // Validate incoming data fields match existing entry's fields
             const existingEntry = tableData[entryIndex];
             const keysToValidate = Object.keys(existingEntry).filter(key => key !== 'entry_id');
             const incomingDataKeys = Object.keys(data);
@@ -149,7 +129,7 @@ const handleUpdateData = (req, res, tableName, entryId) => {
                 }
             }
 
-            // Dismiss possible entry_id in the incoming data
+            // Remove possible entry_id from incoming data
             delete data.entry_id;
 
             tableData[entryIndex] = { ...existingEntry, ...data, entry_id: entryId };
@@ -166,6 +146,7 @@ const handleUpdateData = (req, res, tableName, entryId) => {
     });
 };
 
+// Handle deleting data by entry ID
 const handleDeleteDataByEntryId = (req, res, tableName, entryId) => {
     const filePath = getTableFilePath(tableName);
 
@@ -188,6 +169,7 @@ const handleDeleteDataByEntryId = (req, res, tableName, entryId) => {
     });
 };
 
+// Handle deleting an entire table
 const handleDeleteTable = (req, res, tableName) => {
     const filePath = getTableFilePath(tableName);
 
@@ -201,6 +183,7 @@ const handleDeleteTable = (req, res, tableName) => {
     });
 };
 
+// Main server logic to route requests
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
     const { pathname } = parsedUrl;
@@ -224,6 +207,7 @@ const server = http.createServer((req, res) => {
     }
 });
 
+// Start the server on the specified port
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
