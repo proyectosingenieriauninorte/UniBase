@@ -1,6 +1,6 @@
-import Entry from '../entities/entry.js';
+import Entry from '../../entities/entry.js';
 
-class DataManager {
+class DataRepository {
     constructor(fileManager) {
         this.fileManager = fileManager;
     }
@@ -78,4 +78,4 @@ class DataManager {
     }
 }
 
-export default DataManager;
+export default DataRepository;
