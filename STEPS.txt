@@ -6,7 +6,7 @@ npm init -y
 npm install mocha chai supertest --save-dev
 
 Initialize a new Node.js project using npm:
-node server.js
+node src/index.js
 
 Testing the Endpoints
 

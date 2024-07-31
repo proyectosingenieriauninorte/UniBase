@@ -2,6 +2,38 @@
 
 UniBase is a web service for storing and retrieving data. It supports various data manipulation operations including data storage, retrieval, update, deletion, and table management.
 
+## Architecture Overview
+
+UniBase is built following the principles of Clean Architecture, which promotes separation of concerns and independent layers. This design ensures the system is scalable, maintainable, and testable.
+
+### Layers
+
+1. **Frameworks & Drivers**: Handles the HTTP server setup and request routing. The server receives requests and delegates them to the controllers for further processing.
+   
+2. **Interface Adapters**: Contains the controllers and repositories. The controllers adapt the HTTP requests into method calls for the use cases, while the repositories handle interactions with the data layer (in this case, the file system).
+
+3. **Use Cases**: Implements the application's business logic. Each use case corresponds to a specific business operation (e.g., storing data, retrieving data). Use cases interact with repositories to perform necessary data operations.
+
+4. **Entities**: Contains the core business entities, which encapsulate the data structure used within the application.
+
+### Request Flow
+
+When a request is made to UniBase, it passes through the following layers:
+
+1. **HTTP Request**: The client sends an HTTP request to the UniBase server.
+   
+2. **Server (Frameworks & Drivers Layer)**: The Node.js server receives the request and passes it to the `HttpController`.
+   
+3. **HttpController (Interface Adapters Layer)**: The controller identifies the type of request and forwards it to the appropriate use case.
+
+4. **Use Cases Layer**: The use case class handles the business logic and coordinates operations, such as storing or retrieving data. It interacts with the `DataRepository` to access and manipulate data.
+
+5. **DataRepository (Interface Adapters Layer)**: The repository manages the interaction with the file system, using the `FileManager` to perform read/write operations.
+
+6. **FileManager (Interface Adapters Layer)**: The file manager performs the actual file I/O operations, reading from or writing to JSON files that represent tables.
+
+7. **HTTP Response**: The result of the use case execution is returned through the `HttpController` back to the client.
+
 ## Functional Requirements
 
 ### Data Storage and Retrieval
@@ -140,6 +172,13 @@ UniBase must support:
 - Provide detailed API documentation with examples for each endpoint.
 - Include information on request and response formats, error codes, and usage scenarios.
 
+## Contributing
+
+Thanks for your interest in contributing to this project.
+Get started with our [Contributing Guide][contrib].
+
 ## Author
 
 - **Augusto Salazar**
+
+[contrib]: https://github.com/proyectosingenieriauninorte/.github/blob/master/CONTRIBUTING.md
