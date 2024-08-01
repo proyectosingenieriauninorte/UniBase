@@ -172,6 +172,60 @@ UniBase must support:
 - Provide detailed API documentation with examples for each endpoint.
 - Include information on request and response formats, error codes, and usage scenarios.
 
+### Sequence Diagram
+
+Below is a sequence diagram that illustrates the request flow in UniBase:
+
+```plantuml
+@startuml
+
+actor Client
+
+Client -> Server: HTTP Request (POST /data/store)
+Server -> HttpController: handleRequest(req, res)
+
+alt Path: POST /data/store
+    HttpController -> StoreDataUseCase: execute(req, res)
+    StoreDataUseCase -> DataRepository: storeData(table_name, data)
+    DataRepository -> FileManager: getTableFilePath(tableName)
+    DataRepository -> FileManager: readFile(filePath)
+    FileManager --> DataRepository: tableData
+    DataRepository -> Entry: new Entry(data)
+    DataRepository -> FileManager: writeFile(filePath, tableData)
+    FileManager --> DataRepository: (write success)
+    DataRepository --> StoreDataUseCase: entry_id
+    StoreDataUseCase --> HttpController: entry_id
+    HttpController -> Client: HTTP Response (200 OK, entry_id)
+else Invalid Path
+    HttpController -> Client: HTTP Response (404 Not Found)
+end
+
+note right of Server
+    Layer: Frameworks & Drivers
+end note
+
+note right of HttpController
+    Layer: Interface Adapters
+end note
+
+note right of StoreDataUseCase
+    Layer: Use Cases
+end note
+
+note right of DataRepository
+    Layer: Interface Adapters (Repository)
+end note
+
+note right of FileManager
+    Layer: Interface Adapters (File System)
+end note
+
+note right of Entry
+    Layer: Entities
+end note
+
+@enduml
+```
 ## Contributing
 
 Thanks for your interest in contributing to this project.
