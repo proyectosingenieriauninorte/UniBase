@@ -1,5 +1,5 @@
 class UseCase {
-    execute(req, res) {
+    execute(req, res, projectId) {
         throw new Error("Method 'execute()' must be implemented.");
     }
 }

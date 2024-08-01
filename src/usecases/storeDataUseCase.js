@@ -6,10 +6,10 @@ class StoreDataUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res) {
+    async execute(req, res, projectId) {
         try {
             const { table_name, data } = await this.parseBody(req);
-            const entry_id = await this.dataRepository.storeData(table_name, data);
+            const entry_id = await this.dataRepository.storeData(projectId,table_name, data);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ entry_id }));

@@ -5,7 +5,7 @@ class DataRepository {
         this.fileManager = fileManager;
     }
 
-    async storeData(tableName, data) {
+    async storeData(projectId,tableName, data) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         let tableData = [];
 
@@ -23,7 +23,7 @@ class DataRepository {
         return entry.entry_id;
     }
 
-    async getAllData(tableName) {
+    async getAllData(projectId,tableName) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         let tableData = [];
 
@@ -36,14 +36,14 @@ class DataRepository {
         return tableData;
     }
 
-    async getDataByEntryId(tableName, entryId) {
+    async getDataByEntryId(projectId,tableName, entryId) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         const tableData = await this.fileManager.readFile(filePath);
 
         return tableData.find(item => item.entry_id === entryId);
     }
 
-    async updateData(tableName, entryId, newData) {
+    async updateData(projectId,tableName, entryId, newData) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         let tableData = await this.fileManager.readFile(filePath);
 
@@ -59,7 +59,7 @@ class DataRepository {
         return tableData[entryIndex];
     }
 
-    async deleteDataByEntryId(tableName, entryId) {
+    async deleteDataByEntryId(projectId,tableName, entryId) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         let tableData = await this.fileManager.readFile(filePath);
 
@@ -70,7 +70,7 @@ class DataRepository {
         return true;
     }
 
-    async deleteTable(tableName) {
+    async deleteTable(projectId,tableName) {
         const filePath = this.fileManager.getTableFilePath(tableName);
         await this.fileManager.deleteFile(filePath);
 

@@ -6,10 +6,10 @@ class UpdateDataUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName, entryId) {
+    async execute(req, res, projectId, tableName, entryId) {
         try {
             const { data } = await this.parseBody(req);
-            const updatedData = await this.dataRepository.updateData(tableName, entryId, data);
+            const updatedData = await this.dataRepository.updateData(projectId,tableName, entryId, data);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ status: 'success', data: updatedData }));

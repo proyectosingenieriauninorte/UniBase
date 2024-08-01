@@ -6,9 +6,9 @@ class GetDataByEntryIdUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName, entryId) {
+    async execute(req, res,projectId, tableName, entryId) {
         try {
-            const data = await this.dataRepository.getDataByEntryId(tableName, entryId);
+            const data = await this.dataRepository.getDataByEntryId(projectId,tableName, entryId);
 
             if (!data) {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
