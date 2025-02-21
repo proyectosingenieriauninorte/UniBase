@@ -6,9 +6,9 @@ class GetAllDataUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName) {
+    async execute(req, res,projectId, tableName) {
         try {
-            const data = await this.dataRepository.getAllData(tableName);
+            const data = await this.dataRepository.getAllData(projectId,tableName);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ data }));

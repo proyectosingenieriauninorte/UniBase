@@ -6,9 +6,9 @@ class DeleteDataByEntryIdUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName, entryId) {
+    async execute(req, res,projectId, tableName, entryId) {
         try {
-            await this.dataRepository.deleteDataByEntryId(tableName, entryId);
+            await this.dataRepository.deleteDataByEntryId(projectId,tableName, entryId);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ status: 'success' }));

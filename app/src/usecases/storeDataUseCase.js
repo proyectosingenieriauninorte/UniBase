@@ -1,22 +1,22 @@
 import UseCase from './useCase.js';
 
-class UpdateDataUseCase extends UseCase {
+class StoreDataUseCase extends UseCase {
     constructor(dataRepository) {
         super();
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName, entryId) {
+    async execute(req, res, projectId) {
         try {
-            const { data } = await this.parseBody(req);
-            const updatedData = await this.dataRepository.updateData(tableName, entryId, data);
+            const { table_name, data } = await this.parseBody(req);
+            const entry_id = await this.dataRepository.storeData(projectId,table_name, data);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ status: 'success', data: updatedData }));
+            res.end(JSON.stringify({ entry_id }));
         } catch (error) {
-            console.error('Error in UpdateDataUseCase:', error);
+            console.error('Error in StoreDataUseCase:', error);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to update data', details: error.message }));
+            res.end(JSON.stringify({ error: 'Failed to store data', details: error.message }));
         }
     }
 
@@ -33,4 +33,4 @@ class UpdateDataUseCase extends UseCase {
     }
 }
 
-export default UpdateDataUseCase;
+export default StoreDataUseCase;

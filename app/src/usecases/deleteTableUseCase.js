@@ -6,9 +6,9 @@ class DeleteTableUseCase extends UseCase {
         this.dataRepository = dataRepository;
     }
 
-    async execute(req, res, tableName) {
+    async execute(req, res,projectId, tableName) {
         try {
-            await this.dataRepository.deleteTable(tableName);
+            await this.dataRepository.deleteTable(projectId,tableName);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ status: 'success' }));
