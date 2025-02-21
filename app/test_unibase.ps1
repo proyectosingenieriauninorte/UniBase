@@ -1,5 +1,5 @@
 # Variables
-$BaseUrl = "http://localhost:3000"
+$BaseUrl = "http://localhost:5027/data"
 $TableName = "test_table"
 $EntryId = ""
 $Data = @{

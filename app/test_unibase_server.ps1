@@ -1,5 +1,5 @@
 # Variables
-$BaseUrl = "https://unibase.azurewebsites.net"
+$BaseUrl = "https://proyectosingenieria.uninorte.edu.co/unibase/data"
 $TableName = "test_table"
 $EntryId = ""
 $Data = @{
