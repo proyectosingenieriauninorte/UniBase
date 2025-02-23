@@ -23,7 +23,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /home/proyecto/AuthenticationServer/
+          cd /home/proyecto/UniBase/
           git pull origin main
           git status
           docker stop unidb-app
